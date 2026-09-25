@@ -1,0 +1,21 @@
+# 集成测试 profile：H2（MySQL 兼容模式）+ 内存库，不依赖外部 MySQL / Docker。
+# 生产配置（application-dev/test/prod.yml）保持 MySQL 不变。
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:it_inspect;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-h2.sql
+  # 测试不连 Redis（demo 缓存端口不用到；Lettuce 懒连接，不影响启动）
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+logging:
+  level:
+    com.somepro: warn
